@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 19:16:55 by kali             ###   ########.fr       */
+/*   Updated: 2024/06/26 09:15:14 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_node *ft_left_hand()
 
     if (neobash.prs_state || !neobash.cur_tok)
         return (NULL);
-    if (neobash.cur_tok->type = R_PARENT || is_pair())
+    if (neobash.cur_tok->type == R_PARENT || is_pair())
         return (set_state(1), NULL);
     else if (neobash.cur_tok->type == L_PARENT)
     {

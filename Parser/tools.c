@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 17:23:57 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 18:48:15 by kali             ###   ########.fr       */
+/*   Updated: 2024/06/26 09:18:56 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void ft_skip_tok()
 
 bool is_pair()
 {
-    if (neobash.cur_tok->type == OR || neobash.cur_tok->type == AND
-            || neobash.cur_tok->type == PIPE)
+    if (!neobash.cur_tok)
+        return (false);
+    if (neobash.cur_tok->type == OR || neobash.cur_tok->type == AND || neobash.cur_tok->type == PIPE)
         return (true);
     else
         return (false);
