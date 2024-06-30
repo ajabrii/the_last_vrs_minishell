@@ -3,130 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/15 19:01:04 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 19:13:21 by kali             ###   ########.fr       */
+/*   Created: 2024/05/20 15:16:25 by ajabri            #+#    #+#             */
+/*   Updated: 2024/06/30 09:21:08 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../Header/headers.h"
 
-
-// create separator node
-// bool ft_add_sp_node(char **line, t_token **tokens, t_token_t type)
-// {
-//     if (!ft_token_addback(tokens, ft_tokennew(type, NULL)))
-//         return (false);
-//     *line++;
-//     if (type == APPEND || type == OR || type == AND || type == HEREDOC)
-//         *line++;
-//     return (true);
-// }
-
-int ft_token_sp(t_token **tokens, char **line)
+void ft_throwerr(char *err,int flag)
 {
-    if (!ft_strncmp(*line, ">>", 2))
-        return(ft_add_sp_node(line, tokens, APPEND) && 1);
-    else if (!ft_strncmp(*line, "<<", 2))
-        return(ft_add_sp_node(line, tokens, HEREDOC) && 1);
-    else if (!ft_strncmp(*line, "<", 1))
-        return(ft_add_sp_node(line, tokens, INPUT) && 1);
-    else if (!ft_strncmp(*line, ">", 1))
-        return(ft_add_sp_node(line, tokens, REDIRECT) && 1);
-    else if (!ft_strncmp(*line, "&&", 2))
-        return(ft_add_sp_node(line, tokens, AND) && 1);
-    else if (!ft_strncmp(*line, "||", 2))
-        return(ft_add_sp_node(line, tokens, OR) && 1);
-    else if (!ft_strncmp(*line, "(", 1))
-        return(ft_add_sp_node(line, tokens, L_PARENT) && 1);
-    else if (!ft_strncmp(*line, ")", 1))
-        return(ft_add_sp_node(line, tokens, R_PARENT) && 1);
-    else
-        return(ft_add_sp_node(line, tokens, PIPE) && 1);
+    write(2, err, ft_strlen(err));
+    write(2, "\n", 1);
+    if (!flag)
+        exit(1);
 }
-int	ft_is_separatorv2(char *s)
+void ft_coutquotes()
 {
-	if (!ft_strncmp(s, "&&", 2) || *s == ' ' || *s == '\t'
-		|| *s == '<' || *s == '>' || *s == '|' || *s == '(' || *s == ')')
-		return (1);
-	return (0);
+	int i;
+
+	i = 0;
+	int dq = 0;
+	int sq = 0;
+	while (neobash.line[i])
+	{
+		if (neobash.line[i] == 34)
+			dq += 1;
+		else if(neobash.line[i] == 39)
+			sq += 1;
+		i++;
+	}
+	if (sq % 2 != 0)
+        ft_throwerr("neoneobash: the single qoutes are not closed", 1);
+    if (dq % 2 != 0)
+        ft_throwerr("neoneobash: the double qoutes are not closed", 1);
+
 }
 
-int    ft_add_identifier(t_token **tokens, char **line)
+void    give_token()
 {
-    char    *v;
-    int     i;
-    char    *ptr;
-    t_token *new;
+    t_token *head;
+    int i;
 
-    ptr = *line;
+    // int sub_count = ft_countv2(neobash.sub);
     i = 0;
-    while (ptr[i] && (!ft_is_separatorv2(ptr + i)))
+    head = NULL;
+    while (neobash.sub[i])
     {
-        if (ft_is_quote(ptr[i]))
-        {
-            if (!ft_skipq(ptr, &i)) // skip the quotes
-            {
-                return (0); // To Do quotes error
-            }
-        }
-        else
+        if (is_whitespaces(*neobash.sub[i]))
             i++;
+        if (!neobash.sub[i])
+            break;
+        ft_lstadd_backv3(&head, ft_lstnewv3(neobash.sub[i], set_token(i)));
+        // printf("`%s'\n", neobash.sub[i]);
+        i++;
     }
-    v = ft_substr(ptr, 0, i); // i need to change all malloc into ft_malloc
-    // printf("[v'%s'][ptr'%s'][start'%c'][end'%c']\n", v, ptr, ptr[0], ptr[i - 1]);
-    if (!v)
-        return (0);
-    new = ft_tokennew(WRD, v);
-    if (!new)
-        return (free(v), 0);
-    *line += i;
-    return (ft_token_addback(tokens, new), 1); // probably somthing wrong here so when i start debuging take this in 3ayn al i3tibar
+    neobash.tokens = head;
+    // expander();
+    while (head)
+    {
+        // printf("node[%s][%d]\n", head->value, head->token);
+        printf("[%s]-[%d]\n", head->value, head->type);
+
+        head = head->next;
+    }
 }
 
-t_token *ft_tokenizer(char *line)
+void ft_lexer()
 {
-    t_token *token_h; // token head;
-    int flag;
-
-    flag = 0;
-    token_h = NULL;
-    while (*line)
-    {
-        if (flag)
-            return (NULL); // free here
-        if (ft_isspace(*line))
-            ft_skips(&line);
-        else if (!ft_strncmp(line, "<", 1) || !ft_strncmp(line, ">", 1)
-			|| !ft_strncmp(line, "|", 1) || !ft_strncmp(line, "&&", 2)
-			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1))
-        {
-            // printf("hello separator\n");
-            flag = (!ft_token_sp(&token_h, &line));
-        }
-        else
-        {
-            // printf("hello identifier\n");
-            flag = (!ft_add_identifier(&token_h, &line) && 1);
-        }
-    }
-    return (token_h);
-}
-
-t_token *ft_lexer()
-{
-    t_token *token_l;
-
-    token_l = ft_tokenizer(neobash.line);
-    free(neobash.line);
-    neobash.line = NULL;
-    t_token *n = token_l;
-    while (n)
-    {
-        printf("value:[%s]_____type[%d]\n",n->value, n->type);
-        n = n->next;
-    }
-    // exit(126);
-    return (token_l);
+    ft_lexical();
+    give_token();
 }

@@ -1,17 +1,133 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_parser.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/06/30 13:23:12 by ajabri           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-# include "../Header/headers.h"
 
+# include "Header/headers.h"
+
+void set_state(int state)
+{
+    // 0 no problem
+    // 1 is a syntax problem
+    // 2 other errors and problems
+    neobash.prs_state = state;
+}
+void ft_skip_tok()
+{
+    neobash.cur_tok = neobash.cur_tok->next;
+}
+
+bool is_pair()
+{
+    if (!neobash.cur_tok)
+        return (false);
+    if (neobash.cur_tok->type == OR || neobash.cur_tok->type == AND || neobash.cur_tok->type == PIPE)
+        return (true);
+    else
+        return (false);
+}
+
+bool is_io()
+{
+    if (neobash.cur_tok->type == APPEND || neobash.cur_tok->type == REDIRECT
+            || neobash.cur_tok->type == INPUT || neobash.cur_tok->type == HEREDOC)
+        return (true);
+    else
+        return (false);
+}
+
+t_node *ft_newnode(t_root_t node_t)
+{
+    t_node *res;
+
+    res = ft_malloc(sizeof(t_node));
+    res->type = node_t;
+    res->args = NULL;
+    res->left = NULL;
+    res->right = NULL;
+    res->iol = NULL;
+    return (res);
+}
+
+char *ft_strjoinc(const char *s1, const char *s2, char c)
+{
+    char	*res;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+    if (!c || !ft_strlen(s1) || !ft_strlen(s2))
+        return (ft_strjoin(s1, s2));
+	res = ft_malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	res[i++] = c;
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	return (res);
+}
+t_io *create_io_node(char *val, t_io_t type)
+{
+    t_io *res;
+
+    res = ft_malloc(sizeof(t_io));
+    res->value = ft_strdup(val);
+    res->type = type;
+    res->next = NULL;
+    return (res);
+}
+
+t_io_t get_type(t_token_t tk)
+{
+    if (tk == APPEND)
+        return (APP);
+    else if (tk == HEREDOC)
+        return (HERE_DOC);
+    else if (tk == INPUT)
+        return (IN);
+    else if (tk == REDIRECT)
+        return (OUT);
+}
+
+
+void ft_addback_io_node(t_io **iop, t_io *new)
+{
+    t_io *tmp;
+
+    if (!*iop)
+    {
+        *iop = new;
+        return;
+    }
+    tmp = *iop;
+    while (tmp && tmp->next)
+        tmp = tmp->next;
+    tmp->next = new;
+}
+
+bool    create_iol(t_io **io, t_io_t io_t)
+{
+    t_io *new;
+
+    if (neobash.prs_state)
+        return (false);
+    while (neobash.cur_tok && is_io())
+    {
+        ft_skip_tok();
+        if (!neobash.cur_tok || neobash.cur_tok->type != WRD)
+            return (set_state(1), false);
+        new = create_io_node(neobash.cur_tok->value, io_t);
+        if (!new)
+            return (set_state(2), false);
+        ft_addback_io_node(io, new);
+        ft_skip_tok();
+    }
+    return (true);
+}
 bool ft_argv(char **cmd)
 {
     char *tmp;
@@ -84,23 +200,13 @@ t_node *ft_left_hand()
         return (ft_scmd());
 }
 
-int ft_precedence(t_token_t tp)
+int ft_precedence()
 {
-    if (tp == PIPE)
-        return 2;
-    else if (tp == OR)
-        return 1;
-    else if (tp == AND)
-        return 0;
+    if (neobash.cur_tok->type == PIPE
+        || neobash.cur_tok->type == AND || neobash.cur_tok->type == OR)
+        return (0);
     else
-        return -1; // Handle default or error case
-
-
-    // if (neobash.cur_tok->type == PIPE
-    //     || neobash.cur_tok->type == AND || neobash.cur_tok->type == OR)
-    //     return (0);
-    // else
-    //     return (1);
+        return (1);
 }
 
 
@@ -134,13 +240,13 @@ t_node *ft_rdp(int p)
     left = ft_left_hand();
     if (!left)
         return (NULL);
-    while (is_pair() && ft_precedence(neobash.cur_tok->type) >= p)
+    while (is_pair() && ft_precedence() <= p)
     {
         tmp = neobash.cur_tok->type;
         ft_skip_tok();
         if (!neobash.cur_tok)
             return (set_state(1), left);
-        neobash.np = ft_precedence(tmp) + 1;
+        neobash.np = ft_precedence() + 1;
         right = ft_rdp(neobash.np);
         if (!right)
             return (left);

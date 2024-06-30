@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 18:58:35 by kali             ###   ########.fr       */
+/*   Updated: 2024/06/30 12:10:33 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ typedef struct s_node
     t_root_t        type;
     t_io            *iol; // input/output
     char            *args; // the name cmdargs is better
-    // char **exp_val;
+    char **exp_val;
     struct s_node *left;
     struct s_node *right;
 } t_node;
@@ -123,6 +123,7 @@ typedef struct s_shell
     int             status;
     int             prs_state;
     char            **envp;
+    char            **sub;
     // char            *prompt;
     t_env           *envl;
     t_leak          *leaks;
@@ -140,24 +141,31 @@ t_leak      *ft_lstlastv2(t_leak *lst);
 /* </Builtins/env.c> */
 
 /* <Lexer/lexixal.c> */
-t_token     *ft_lexer();
-t_token     *ft_tokenizer(char *line);
-int         ft_add_identifier(t_token **tokens, char **line);
-int         ft_token_sp(t_token **tokens, char **line);
+void ft_lexer();
+void    give_token();
+void ft_coutquotes();
+// int ft_token_sp(t_token **tokens, char **line);
 /* </Lexer/lexixal.c> */
 
-/* <Lexer/token_utils.c> */
-void	    ft_token_addback(t_token **head, t_token *ntoken);
-t_token     *ft_tokennew(t_token_t type, char *v);
-bool	    ft_is_separator(char *line);
-void	    ft_skips(char **line);
-bool	    ft_is_quote(char c);
-/* </Lexer/token_utils.c> */
+/* <Lexer/lex_utils.c> */
+bool check_spcial(char c);
+bool check_red_or_and(char *line, int i);
+void ft_lstadd_backv3(t_token **lst, t_token *newx);
+t_token	*ft_lstnewv3(char *var, t_token_t token);
+t_token	*ft_lstlastv3(t_token *lst);
+/* </Lexer/lex_utils.c> */
 
-/* <Lexer/token_utils1.c> */
-bool	    ft_skipq(char *line, int *index);
-int         ft_add_sp_node(char **line, t_token **tokens, t_token_t type);
-/* </Lexer/token_utils1.c> */
+/* <Lexer/token.c> */
+t_token_t set_token(int i);
+bool is_whitespaces(char line);
+int count_whitespaces(char *line, int i);
+int count_inside_quotes(int i, char q);
+bool is_quotition(char i);
+/* </Lexer/token.c> */
+
+/* <Lexer/lextools.c> */
+void ft_lexical();
+/* <Lexer/lextools.c> */
 
 /* <Leaks/garbedge.c> */
 void *ft_malloc(size_t size);
@@ -173,7 +181,7 @@ bool ft_argv(char **cmd);
 t_node *ft_scmd();
 t_node *ft_left_hand();
 t_node *ft_rdp(int p);
-int ft_precedence();
+int ft_precedence(t_token_t tp);
 /* </Parsing/ft_parsing.c> */
 
 /* <Parsing/tools.c> */
@@ -191,5 +199,8 @@ t_io    *create_io_node(char *val, t_io_t type);
 t_io_t  get_type(t_token_t tk);
 void    ft_addback_io_node(t_io **iop, t_io *new);
 /* </Parsing/putils.c> */
+
+//demo
+
 
 #endif

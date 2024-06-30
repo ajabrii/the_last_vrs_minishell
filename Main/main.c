@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 19:04:14 by kali             ###   ########.fr       */
+/*   Updated: 2024/06/30 06:38:04 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../Header/headers.h"
 
 g_shell neobash;
-
-
-
 
 void print_spaces(int num_spaces) {
     for (int i = 0; i < num_spaces; ++i) {
@@ -118,7 +115,7 @@ void neoshell()
         neobash.line = readline(PROMPT);
         if (neobash.line)
             add_history(neobash.line);
-        neobash.tokens = ft_lexer();
+        ft_lexer();
         if (!neobash.tokens)
             continue;
         neobash.tree = ft_parser();
