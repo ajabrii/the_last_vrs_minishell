@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 06:16:19 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 09:57:30 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ typedef enum s_token_t
 	REDIRECT,
 	L_PARENT,
 	R_PARENT,
+    //STAR,
 	AND,
 	OR,
 	PIPE,
-	NEW_LINE
+	NEW_LINE,
+    SYNTAX
 }t_token_t;
 
 /*token list*/

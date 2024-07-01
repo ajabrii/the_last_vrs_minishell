@@ -3,7 +3,7 @@ NAME = minishell
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 SRC = Main/main.c
 SRC += Lexer/lexical.c Lexer/lextools.c Lexer/token.c Lexer/lex_utils.c
@@ -18,7 +18,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 	$(MAKE) -C $(LIBFT_DIR) bonus
 
-$(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -lreadline -L$(LIBFT_DIR) -lft
 	@sleep 1
 	@echo "\033[0;32mcreating the minishell is Done!\033[0m"

@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:16:34 by ajabri            #+#    #+#             */
-/*   Updated: 2024/06/30 13:41:27 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 10:01:10 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,19 @@ bool is_whitespaces(char line)
         return (true);
     return (false);
 }
-
+bool is_badchar(char *c)
+{
+    if (c[0] == ';' || c[0] == '`' || c[0] == '\\' || c[0] == '{' || c[0] == '}')
+        return (true);
+    if (c[0] == '[' || c[0] == ']' || c[0] == '@' || c[0] == '#' || c[0] == '%')
+        return (true);
+    if (c[0] == '!' || c[0] == ':')
+        return (true);
+    if (c[0] == '&' && ft_strlen(c) == 1)
+        return (true);
+    else
+        return (false);
+}
 t_token_t set_token(int i)
 {
     if (!ft_strncmp(neobash.sub[i], ">",1))
@@ -89,10 +101,10 @@ t_token_t set_token(int i)
         return (L_PARENT);
     else if (!ft_strncmp(neobash.sub[i], ")", 1))
         return (R_PARENT);
+    else if (is_badchar(neobash.sub[i]))
+        return (SYNTAX);
     else
     {
-        // if (neobash.sub[i][0] == '-')
-        //     return (OPTION);
         return (WRD);
     }
 }

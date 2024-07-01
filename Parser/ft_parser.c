@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 06:31:59 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 09:58:21 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,7 @@ int ft_precedence(t_token_t tp)
     else if (tp == AND)
         return 0;
     else
-        return -1; // Handle default or error case
-
-
-    // if (neobash.cur_tok->type == PIPE
-    //     || neobash.cur_tok->type == AND || neobash.cur_tok->type == OR)
-    //     return (0);
-    // else
-    //     return (1);
+        return -1;
 }
 
 
@@ -157,12 +150,8 @@ t_node  *ft_parser()
     t_node      *tree_root;
 
     neobash.cur_tok = neobash.tokens;
-    // printf("`%s'\n", neobash.cur_tok->value);
-    tree_root = ft_rdp(0); // recursive decent parser;
+    tree_root = ft_rdp(0);
     if (neobash.cur_tok)
-    {
-        // printf("here 1\n");
         return (set_state(1), tree_root);
-    }
     return (tree_root);
 }
