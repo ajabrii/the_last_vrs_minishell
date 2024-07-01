@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:16:34 by ajabri            #+#    #+#             */
-/*   Updated: 2024/06/30 09:19:14 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/06/30 13:41:27 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 
+    i = 0;
     while (s1[i] && s2[i] && s1[i] == s2[i])
     {
         i++;

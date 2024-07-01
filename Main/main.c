@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/06/30 06:38:04 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 06:37:21 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,46 @@ void print_ast(t_node *root) {
 /*/***************************** */
 void    ft_init_neobash(char **env)
 {
+    (void)env;
     // get_env_list(env);
     neobash.prs_state = 0;
     // neobash.prompt = NULL;
 }
+/*lldld*/
+void    ft_syntax_after()
+{
+    if (neobash.prs_state == 1)
+    {
+        if (!neobash.cur_tok)
+        {
+            // neobash.cur_tok->type = NEW_LINE;
+        printf("neobash: syntax error near unexpected token `%s'\n", "newline");
+        return ;
+        }
+        printf("neobash: syntax error near unexpected token `%s'\n", neobash.cur_tok->value);
+    }
+
+    return;
+}
+
+bool ft_syntax_before()
+{
+    t_token *cur;
+
+    free(neobash.line);
+    cur = neobash.tokens;
+    while (cur)
+    {
+        if (!ft_strncmp(cur->value, ";", 1))
+        {
+            printf("neobash: syntax error near unexpected token `%s'\n",cur->value);
+            return (false);
+        }
+        cur = cur->next;
+    }
+    return (true);
+}
+/*ldkdd*/
 
 void neoshell()
 {
@@ -118,11 +154,14 @@ void neoshell()
         ft_lexer();
         if (!neobash.tokens)
             continue;
+        if (!ft_syntax_before())
+            continue;
         neobash.tree = ft_parser();
-        print_ast(neobash.tree);
+        // print_ast(neobash.tree);
         if (neobash.prs_state)
         {
-            // ft_syntax();
+            ft_syntax_after();
+            neobash.prs_state = 0;
             continue;
         }
         // ft_execute();

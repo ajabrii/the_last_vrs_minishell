@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/06/30 12:10:33 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 06:16:19 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
-# include "../LIBFT/libft.h"
+# include "../Libft/libft.h"
 
 /*colors*/
 # define RED "\033[30;31m"
@@ -49,12 +49,12 @@ typedef enum s_token_t
 	APPEND,
 	HEREDOC,
 	REDIRECT,
-	PIPE,
 	L_PARENT,
 	R_PARENT,
 	AND,
 	OR,
-	// T_NL
+	PIPE,
+	NEW_LINE
 }t_token_t;
 
 /*token list*/
@@ -92,6 +92,7 @@ typedef enum s_node_t
     PIPE_N,
     CMD_N,
     IO_N,
+    NOTHING // this is just for return function
 } t_root_t;
 /*this struct is the node that compose the tree AST*/
 typedef struct s_node
@@ -144,6 +145,7 @@ t_leak      *ft_lstlastv2(t_leak *lst);
 void ft_lexer();
 void    give_token();
 void ft_coutquotes();
+void ft_err(char *err, int flag);
 // int ft_token_sp(t_token **tokens, char **line);
 /* </Lexer/lexixal.c> */
 

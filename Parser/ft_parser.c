@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/06/30 13:23:12 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 06:31:59 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ t_root_t get_node_t(t_token_t tk)
     else if (tk == AND)
         return (AND_N);
     else if (tk == OR)
-        return (OR_N);;
+        return (OR_N);
+    return (NOTHING);
 }
 t_node *create_pair_node(t_node *left, t_node *right, t_root_t node_t)
 {
@@ -156,9 +157,11 @@ t_node  *ft_parser()
     t_node      *tree_root;
 
     neobash.cur_tok = neobash.tokens;
+    // printf("`%s'\n", neobash.cur_tok->value);
     tree_root = ft_rdp(0); // recursive decent parser;
     if (neobash.cur_tok)
     {
+        // printf("here 1\n");
         return (set_state(1), tree_root);
     }
     return (tree_root);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   putils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 17:53:42 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 18:50:06 by kali             ###   ########.fr       */
+/*   Updated: 2024/06/30 13:45:29 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ char *ft_strjoinc(const char *s1, const char *s2, char c)
 	j = 0;
 	if (!s1 || !s2)
 		return (NULL);
-    if (!c || !ft_strlen(s1) || !ft_strlen(s2))
+    if ((!c || !ft_strlen(s1) || !ft_strlen(s2)))
+    {
         return (ft_strjoin(s1, s2));
+    }
 	res = ft_malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
 	while (s1[i])
 	{
@@ -55,10 +57,10 @@ t_io_t get_type(t_token_t tk)
         return (HERE_DOC);
     else if (tk == INPUT)
         return (IN);
-    else if (tk == REDIRECT)
-        return (OUT);
+    // else if (tk == REDIRECT)
+    //     return (OUT);
+    return (OUT);
 }
-
 
 void ft_addback_io_node(t_io **iop, t_io *new)
 {

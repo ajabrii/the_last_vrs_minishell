@@ -6,13 +6,13 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:16:25 by ajabri            #+#    #+#             */
-/*   Updated: 2024/06/30 09:21:08 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 06:31:06 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../Header/headers.h"
 
-void ft_throwerr(char *err,int flag)
+void ft_err(char *err,int flag)
 {
     write(2, err, ft_strlen(err));
     write(2, "\n", 1);
@@ -35,9 +35,9 @@ void ft_coutquotes()
 		i++;
 	}
 	if (sq % 2 != 0)
-        ft_throwerr("neoneobash: the single qoutes are not closed", 1);
+        ft_err("neoneobash: the single qoutes are not closed", 1);
     if (dq % 2 != 0)
-        ft_throwerr("neoneobash: the double qoutes are not closed", 1);
+        ft_err("neoneobash: the double qoutes are not closed", 1);
 
 }
 
@@ -60,14 +60,14 @@ void    give_token()
         i++;
     }
     neobash.tokens = head;
-    // expander();
-    while (head)
-    {
-        // printf("node[%s][%d]\n", head->value, head->token);
-        printf("[%s]-[%d]\n", head->value, head->type);
+//     // expander();
+//     while (head)
+//     {
+//         // printf("node[%s][%d]\n", head->value, head->token);
+//         printf("[%s]-[%d]\n", head->value, head->type);
 
-        head = head->next;
-    }
+//         head = head->next;
+//     }
 }
 
 void ft_lexer()
