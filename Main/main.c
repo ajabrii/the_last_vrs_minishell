@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 10:14:50 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 11:43:18 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,33 +115,16 @@ void    ft_syntax_after()
     {
         if (!neobash.cur_tok)
         {
-            // neobash.cur_tok->type = NEW_LINE;
         printf("neobash: syntax error near unexpected token `%s'\n", "newline");
+        // free_tree();
         return ;
         }
         printf("neobash: syntax error near unexpected token `%s'\n", neobash.cur_tok->value);
+        // free_tree();
     }
-
     return;
 }
 
-bool ft_syntax_before()
-{
-    t_token *cur;
-
-    free(neobash.line);
-    cur = neobash.tokens;
-    while (cur)
-    {
-        if (!ft_strncmp(cur->value, ";", 1))
-        {
-            printf("neobash: syntax error near unexpected token `%s'\n",cur->value);
-            return (false);
-        }
-        cur = cur->next;
-    }
-    return (true);
-}
 /*ldkdd*/
 
 void neoshell()
@@ -154,10 +137,8 @@ void neoshell()
         ft_lexer();
         if (!neobash.tokens)
             continue;
-        if (!ft_syntax_before())
-            continue;
         neobash.tree = ft_parser();
-        // print_ast(neobash.tree);
+        print_ast(neobash.tree);
         if (neobash.prs_state)
         {
             ft_syntax_after();

@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 10:16:58 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 11:35:25 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef enum s_token_t
 	AND,
 	OR,
 	PIPE,
-	NEW_LINE,
+	// NEW_LINE,
     SYNTAX
 }t_token_t;
 
@@ -204,9 +204,10 @@ t_io_t  get_type(t_token_t tk);
 void    ft_addback_io_node(t_io **iop, t_io *new);
 /* </Parsing/putils.c> */
 
-/* <Builtins/env.c> */
+/* <Builtins> */
 void    ft_env(t_env *env);
-/* </Builtins/env.c> */
+void ft_exit(int ex);
+/* </Builtins> */
 
 /* <Executer/ft_executer.c> */
 void ft_executer();
