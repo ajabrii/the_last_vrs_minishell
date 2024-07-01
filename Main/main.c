@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 10:03:10 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 10:14:50 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void print_ast(t_node *root) {
 void    ft_init_neobash(char **env)
 {
     (void)env;
-    // get_env_list(env);
+    get_env_list(env);
     neobash.prs_state = 0;
     // neobash.prompt = NULL;
 }
@@ -157,14 +157,14 @@ void neoshell()
         if (!ft_syntax_before())
             continue;
         neobash.tree = ft_parser();
-        print_ast(neobash.tree);
+        // print_ast(neobash.tree);
         if (neobash.prs_state)
         {
             ft_syntax_after();
             neobash.prs_state = 0;
             continue;
         }
-        // ft_execute();
+        ft_executer();
     }
     ft_free_all();
 }

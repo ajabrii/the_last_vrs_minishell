@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 19:57:56 by kali              #+#    #+#             */
-/*   Updated: 2024/06/25 16:10:18 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/01 10:20:03 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ size_t ft_strlenc(char *str, char c)
 	while (str[i] && str[i] != c)
 		i++;
 	return (i);
+}
+
+void    ft_strcpy(char *dst, char *src, char c)
+{
+    int i;
+
+    i = 0;
+    while (src[i] && src[i] != c)
+    {
+        dst[i] = src[i];
+        i++;
+    }
+    dst[i] = '\0';
 }
 
 t_env	*ft_env_lstnew(char *var)
@@ -77,9 +90,22 @@ void    get_env_list(char **env)
     i = 0;
     while (env[i])
     {
-        ft_env_lstadd_back(&neobash.envl, ft_envlstnew(env[i]));
+        ft_env_lstadd_back(&neobash.envl, ft_env_lstnew(env[i]));
         i++;
     }
     // shell.size = i;
     // ft_env();
+}
+
+void    ft_env(t_env *env)
+{
+    t_env *tmp;
+
+    tmp = env;
+    while (env)
+    {
+        printf("%s=%s\n",env->key, env->value);
+        env = env->next;
+    }
+    env = tmp;
 }

@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 09:57:30 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/01 10:16:58 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,13 @@ t_io_t  get_type(t_token_t tk);
 void    ft_addback_io_node(t_io **iop, t_io *new);
 /* </Parsing/putils.c> */
 
-//demo
+/* <Builtins/env.c> */
+void    ft_env(t_env *env);
+/* </Builtins/env.c> */
+
+/* <Executer/ft_executer.c> */
+void ft_executer();
+/* </Executer/ft_executer.c> */
 
 
 #endif
