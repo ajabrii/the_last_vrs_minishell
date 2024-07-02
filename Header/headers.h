@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 11:35:25 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/02 05:52:25 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef enum s_token_t
 	AND,
 	OR,
 	PIPE,
-	// NEW_LINE,
     SYNTAX
 }t_token_t;
 
@@ -79,9 +78,9 @@ typedef enum s_io_t
 typedef struct s_io
 {
     t_io_t type;
-    char *value;
-    // char **exp_val;
     int here_doc;
+    char *value;
+    char **exp_val;
     struct s_io *next;
 } t_io;
 /*************************** */
@@ -102,7 +101,7 @@ typedef struct s_node
     t_root_t        type;
     t_io            *iol; // input/output
     char            *args; // the name cmdargs is better
-    char **exp_val;
+    char            **exp_val;
     struct s_node *left;
     struct s_node *right;
 } t_node;

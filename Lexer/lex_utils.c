@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 06:26:32 by ajabri            #+#    #+#             */
-/*   Updated: 2024/06/30 06:28:06 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/02 06:41:26 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ bool check_spcial(char c)
         return (false);
     if (c >= '0' &&  c <= '9')
         return (false);
-    if (c == 45 || c == '.' || c == '/' || c == '$' || c == '_')// this _ is for expand
+    if (c == 45 || c == '.' || c == '/'
+		 || c == '$' || c == '_' || c == '*')// this _ is for expand
         return (false);
     return (true);
 }

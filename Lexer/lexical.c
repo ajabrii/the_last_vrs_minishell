@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:16:25 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/01 10:46:30 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/02 05:46:41 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void ft_coutquotes()
 		i++;
 	}
 	if (sq % 2 != 0)
-        ft_err("neoneobash: the single qoutes are not closed", 1);
+        ft_err("neobash: syntax error near unexpected token `''", 1);
     if (dq % 2 != 0)
-        ft_err("neoneobash: the double qoutes are not closed", 1);
+        ft_err("neobash: syntax error near unexpected token `\"'", 1);
 
 }
 
