@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/02 06:42:46 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/03 08:31:43 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,60 +96,12 @@ g_shell neobash;
 // }
 
 /*88888888888888*/
-
-void printast(t_node *root)
-{
-    t_io *tmp;
-
-    if (!root)
-        return;
-    if (root->type == CMD_N)
-        printf("CMD_N\n");
-    else if (root->type == PIPE_N)
-        printf("PIPE_N\n");
-    else if (root->type == OR_N)
-        printf("OR_N\n");
-    else if (root->type == AND_N)
-        printf("AND_N\n");
-    else
-        printf("???\n");
-    if (root->args)
-        printf("\tnode argument %s\n", root->args);
-    if (root->iol)
-        printf("\tio node\n");
-    tmp = root->iol;
-    while (root->iol)
-    {
-        printf("\tio Type\n");
-        if (root->iol->type == APP)
-            printf("\tAPP >>\n");
-        else if (root->iol->type == IN)
-            printf("\tIN <\n");
-        else if (root->iol->type == OUT)
-            printf("\tOUT >\n");
-        else if (root->iol->type == HERE_DOC)
-            printf("\tHERE_DOC <<\n");
-        printf("\t%s\n", root->iol->value);
-        root->iol = root->iol->next;
-    }
-    root->iol = tmp;
-    if (root->left)
-    {
-        printf("Left Child:\n");
-        printast(root->left);
-    }
-    if (root->right)
-    {
-        printf("Right Child:\n");
-        printast(root->left);
-    }
-}
-/*/***************************** */
 void    ft_init_neobash(char **env)
 {
     (void)env;
     get_env_list(env);
     neobash.prs_state = 0;
+    neobash.paths = grep_paths(env);
     // neobash.prompt = NULL;
 }
 /*lldld*/
@@ -169,8 +121,6 @@ void    ft_syntax_after()
     return;
 }
 
-/*ldkdd*/
-
 void neoshell()
 {
     while (true)
@@ -182,7 +132,7 @@ void neoshell()
         if (!neobash.tokens)
             continue;
         neobash.tree = ft_parser();
-        print_ast(neobash.tree);
+        // print_ast(neobash.tree);
         // printast(neobash.tree);
         if (neobash.prs_state)
         {
@@ -190,7 +140,8 @@ void neoshell()
             neobash.prs_state = 0;
             continue;
         }
-        // ft_executer();
+        neobash.status = execute_ast(neobash.tree);
+        printf("Execution result: %d\n", neobash.status);
     }
     ft_free_all();
 }

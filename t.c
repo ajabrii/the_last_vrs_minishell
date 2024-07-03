@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   headers.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/03 06:56:13 by ajabri           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 # ifndef HEADERS_H
 # define HEADERS_H
@@ -127,9 +116,7 @@ typedef struct s_shell
     char            **sub;
     char            **paths;
     // char            *prompt;
-    char *tmp;// get_cmd_path
-    char *palestine; // get_cmd_path
-    t_env *envl;
+    t_env           *envl;
     t_leak          *leaks;
 } g_shell;
 
@@ -211,11 +198,47 @@ void ft_exit(int ex);
 /* </Builtins> */
 
 /* <Executer/ft_executer.c> */
-unsigned int execute_ast(t_node *root);
-
+void ft_executer();
 /* </Executer/ft_executer.c> */
 
 /* <Main> */
 char    **grep_paths(char **env);
 /* </Main> */
 #endif
+
+/*/***************************** */
+
+
+/*ldkdd*/
+
+void neoshell()
+{
+    while (true)
+    {
+        neobash.line = readline(PROMPT);
+        if (neobash.line)
+            add_history(neobash.line);
+        ft_lexer();
+        if (!neobash.tokens)
+            continue;
+        neobash.tree = ft_parser();
+        // print_ast(neobash.tree);
+        // printast(neobash.tree);
+        if (neobash.prs_state)
+        {
+            ft_syntax_after();
+            neobash.prs_state = 0;
+            continue;
+        }
+        // ft_executer();
+    }
+    ft_free_all();
+}
+int main(int ac, char **av, char **env)
+{
+    (void)ac;
+    (void)av;
+    ft_init_neobash(env);
+    neoshell();
+    return (0);
+}
