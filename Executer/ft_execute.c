@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/03 08:43:44 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/04 06:26:47 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,75 +75,7 @@ unsigned int ex_cmd(t_node *root)
 }
 
 
-unsigned int execute_ast(t_node *root)
-{
-    int ex;
-    int fd[2];
-    pid_t pid;
-    pid_t pid1;
-
-    ex = 42;
-    if (!root)
-        return 1337;
-
-    if (root->type == CMD_N)
-        return ex_cmd(root);
-    else if (root->type == OR_N)
-    {
-        ex = execute_ast(root->left);
-        if (ex != 0)
-        {
-            ex = execute_ast(root->right);
-        }
-    }
-    else if (root->type == AND_N)
-    {
-        ex = execute_ast(root->left);
-        if (ex == 0)
-        {
-            ex = execute_ast(root->right);
-        }
-    }
-    else if (root->type == PIPE_N)
-    {
-        if (pipe(fd) == -1)
-            return 2;
-
-        pid = fork();
-        if (pid == -1)
-            return 2;
-
-        if (pid == 0) // First child
-        {
-            dup2(fd[1], STDOUT_FILENO);
-            close(fd[0]);
-            close(fd[1]);
-            _exit(execute_ast(root->left));
-        }
-
-        pid1 = fork();
-        if (pid1 == -1)
-            return 2;
-
-        if (pid1 == 0) // Second child
-        {
-            dup2(fd[0], STDIN_FILENO);
-            close(fd[1]);
-            close(fd[0]);
-            _exit(execute_ast(root->right));
-        }
-
-        // Parent process
-        close(fd[0]);
-        close(fd[1]);
-        waitpid(pid, &ex, 0);
-        waitpid(pid1, &ex, 0);
-    }
-
-    return ex;
-}
-
-// unsigned int     execute_ast(t_node *root)
+// unsigned int execute_ast(t_node *root)
 // {
 //     int ex;
 //     int fd[2];
@@ -153,48 +85,116 @@ unsigned int execute_ast(t_node *root)
 //     ex = 42;
 //     if (!root)
 //         return 1337;
+
 //     if (root->type == CMD_N)
-//         return (ex_cmd(root));
+//         return ex_cmd(root);
 //     else if (root->type == OR_N)
 //     {
 //         ex = execute_ast(root->left);
 //         if (ex != 0)
 //         {
-//             // printf("right value `%s'\n", root->right->args);
 //             ex = execute_ast(root->right);
 //         }
 //     }
 //     else if (root->type == AND_N)
 //     {
 //         ex = execute_ast(root->left);
-//         ex = execute_ast(root->right);
+//         if (ex == 0)
+//         {
+//             ex = execute_ast(root->right);
+//         }
 //     }
 //     else if (root->type == PIPE_N)
 //     {
-//         if (pipe(fd))
-//             return (2);
+//         if (pipe(fd) == -1)
+//             return 2;
+
 //         pid = fork();
-//         if (!pid)
+//         if (pid == -1)
+//             return 2;
+
+//         if (pid == 0) // First child
 //         {
 //             dup2(fd[1], STDOUT_FILENO);
 //             close(fd[0]);
 //             close(fd[1]);
-//             ex = execute_ast(root->left);
+//             _exit(execute_ast(root->left));
 //         }
+
 //         pid1 = fork();
-//         if (!pid1)
+//         if (pid1 == -1)
+//             return 2;
+
+//         if (pid1 == 0) // Second child
 //         {
 //             dup2(fd[0], STDIN_FILENO);
 //             close(fd[1]);
 //             close(fd[0]);
-//             ex = execute_ast(root->right);
+//             _exit(execute_ast(root->right));
 //         }
-//         else
-//         {
-//             close(fd[1]);
-//             close(fd[0]);
-//             wait(NULL);
-//         }
+
+//         // Parent process
+//         close(fd[0]);
+//         close(fd[1]);
+//         waitpid(pid, &ex, 0);
+//         waitpid(pid1, &ex, 0);
 //     }
-//     return (ex);
+
+//     return ex;
 // }
+
+unsigned int     execute_ast(t_node *root)
+{
+    int ex;
+    int fd[2];
+    pid_t pid;
+    pid_t pid1;
+
+    ex = 42;
+    if (!root)
+        return 1337;
+    if (root->type == CMD_N)
+        return (ex_cmd(root));
+    else if (root->type == OR_N)
+    {
+        ex = execute_ast(root->left);
+        if (ex != 0)
+        {
+            // printf("right value `%s'\n", root->right->args);
+            ex = execute_ast(root->right);
+        }
+    }
+    else if (root->type == AND_N)
+    {
+        ex = execute_ast(root->left);
+        ex = execute_ast(root->right);
+    }
+    else if (root->type == PIPE_N)
+    {
+        if (pipe(fd))
+            return (2);
+        pid = fork();
+        if (!pid)
+        {
+            dup2(fd[1], STDOUT_FILENO);
+            close(fd[0]);
+            close(fd[1]);
+            ex = execute_ast(root->left);
+        }
+        pid1 = fork();
+        if (!pid1)
+        {
+            dup2(fd[0], STDIN_FILENO);
+            close(fd[1]);
+            close(fd[0]);
+            ex = execute_ast(root->right);
+        }
+        else
+        {
+            close(fd[1]);
+            close(fd[0]);
+            wait(NULL);
+        }
+    }
+    return (ex);
+}
