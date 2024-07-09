@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/07/01 09:58:21 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/09 15:52:27 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_node *ft_scmd()
         }
         else if (is_io())
         {
+            printf(RED"[[[  %d ]]][`%s']\n"RES, neobash.cur_tok->type, neobash.cur_tok->value);
             if (!create_iol(&result->iol, get_type(neobash.cur_tok->type)))
                 return (free(result->args), free(result), NULL);
         }

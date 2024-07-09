@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:16:25 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/03 08:12:51 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/09 15:46:37 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ void    give_token()
     }
     neobash.tokens = head;
 //     // expander();
-    // while (head)
-    // {
-    //     // printf("node[%s][%d]\n", head->value, head->token);
-    //     printf("[%s]-[%d]\n", head->value, head->type);
+    while (head)
+    {
+        // printf("node[%s][%d]\n", head->value, head->token);
+        printf("[%s]-[%d]\n", head->value, head->type);
 
-    //     head = head->next;
-    // }
+        head = head->next;
+    }
 }
 
 void ft_lexer()

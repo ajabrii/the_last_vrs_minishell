@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 06:26:32 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/02 06:41:26 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/09 15:46:19 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ bool check_spcial(char c)
     if (c >= '0' &&  c <= '9')
         return (false);
     if (c == 45 || c == '.' || c == '/'
-		 || c == '$' || c == '_' || c == '*')// this _ is for expand
+		 || c == '$' || c == '_' || c == '*' || c == '=')// this _ is for expand
         return (false);
     return (true);
 }

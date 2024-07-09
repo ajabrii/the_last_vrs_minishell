@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/06 11:25:02 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/09 16:45:25 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,103 @@ char	*get_cmd_path(char **paths, char *cmd)
 	return (NULL);
 }
 
+
+bool	ft_is_delimiter(char *delimiter, char *str)
+{
+	while (*str)
+	{
+		if (*delimiter == '"' || *delimiter == '\'')
+		{
+			delimiter++;
+			continue ;
+		}
+		else if (*str == *delimiter)
+		{
+			str++;
+			delimiter++;
+		}
+		else
+			return (false);
+	}
+	while (*delimiter == '"' || *delimiter == '\'')
+		delimiter++;
+	return (!*delimiter);
+}
+
+void	heredoc_f(t_io *io, int p[2])
+{
+	char	*line;
+	char	*quotes;
+
+	quotes = io->value;
+	while (*quotes && *quotes != '"' && *quotes != '\'')
+		quotes++;
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (ft_is_delimiter(io->value, line))
+			break ;
+		else
+		{
+			ft_putstr_fd(line, p[1]);
+			ft_putstr_fd("\n", p[1]);
+		}
+	}
+	// ft_clean_ms();
+	exit(0);
+}
+
+void ft_init_io(t_node *root)
+{
+    int fd[2];
+    pid_t pid;
+    t_io *io;
+
+    if (!root)
+        return;
+    // root->exp_val = ft_expand(root->args);
+    io = root->iol;
+    while (io)
+    {
+        printf("[%s]-[%d]\n", io->value, io->type);
+        if (io->type == HERE_DOC)
+        {
+            printf("Hello \n");
+            neobash.hdoc = 0;
+            pipe(fd);
+            pid = fork();
+            if (!pid)
+                heredoc_f(io, fd);
+            else
+                waitpid(pid, NULL, 0);
+        }
+        // else
+        // {
+        //     printf("hello else\n");
+        //     // io->exp_val = ft_expand(io->value);
+        // }
+        io = io->next;
+    }
+}
+
+void ft_before_exec(t_node *root)
+{
+    t_root_t tp;
+
+    if (!root)
+        return;
+    tp = root->type;
+    if (tp == PIPE_N || tp == OR_N || tp == AND_N)
+    {
+        ft_before_exec(root->left);
+        if (neobash.hdoc)
+            ft_before_exec(root->right);
+    }
+    else
+        ft_init_io(root);
+}
 
 unsigned int ex_cmd(t_node *root)
 {
@@ -73,17 +170,14 @@ unsigned int ex_cmd(t_node *root)
     }
     return (0);
 }
-// bool ft_protect(int (*ft)(void *))
-// {
-//     if (ft == 0)
-// }
 
 void    ex_lpipe(int fd[2], t_node *root)
 {
     close(fd[0]);
     dup2(fd[1], STDOUT_FILENO);
     close(fd[1]);
-    neobash.status = execute_ast(root);
+    neobash.status = ft_executer(root);
+    exit(neobash.status);
 }
 
 void    ex_rpipe(int fd[2], t_node *root)
@@ -91,11 +185,11 @@ void    ex_rpipe(int fd[2], t_node *root)
     close(fd[1]);
     dup2(fd[0], STDIN_FILENO);
     close(fd[0]);
-    neobash.status = execute_ast(root);
+    neobash.status = ft_executer(root);
+    exit(neobash.status);
 }
 
-
-unsigned int ex_pipes(t_node *root)
+int ex_pipes(t_node *root)
 {
     int fd[2];
     pid_t pid0;
@@ -107,56 +201,58 @@ unsigned int ex_pipes(t_node *root)
     if (pid0 < 0)
         return (1);
     if (!pid0)
-    {
         ex_lpipe(fd, root->left);
-    }
     else
     {
         pid1 = fork();
         if (pid1 < 0)
             return (1);
         if (!pid1)
-        {
             ex_rpipe(fd, root->right);
-        }
         else
         {
             close(fd[0]);
             close(fd[1]);
-            wait(NULL);
+            waitpid(pid0,NULL, 0);
+            waitpid(pid1,NULL, 0);
             return (neobash.status);
         }
     }
     return (42);
 }
-unsigned int     execute_ast(t_node *root)
-{
-    int ex;
-    // int fd[2];
-    // pid_t pid;
-    // pid_t pid1;
 
-    ex = 42;
-    // ft_expand_args();
-    if (!root)
-        return (1);
+
+int ft_executer(t_node *root)
+{
+    int exit;
+
+    exit = 1337;
     if (root->type == PIPE_N)
         return (ex_pipes(root));
-    else if (AND_N == root->type)
+    else if (root->type == AND_N)
     {
-        ex = execute_ast(root->left);
-        if (ex == 0)
-            return (execute_ast(root->right));
-        return (ex);
+        exit = ft_executer(root->left);
+        if (exit == 0)
+            return (ft_executer(root->right));
+        return (exit);
     }
-    else if (OR_N == root->type)
+    else if (root->type == OR_N)
     {
-        ex = execute_ast(root->left);
-        if (ex != 0)
-            return (execute_ast(root->right));
+        exit = ft_executer(root->left);
+        if (exit != 0)
+            return (ft_executer(root->right));
+        return (exit);
     }
     else
         return (ex_cmd(root));
-
-    return (ex);
+    return (exit);
 }
+
+void execution()
+{
+    if (!neobash.tree)
+        return;
+    ft_before_exec(neobash.tree);
+    neobash.status = ft_executer(neobash.tree);
+}
+

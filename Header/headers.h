@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/03 06:56:13 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/09 16:31:46 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct s_shell
     char            **envp;
     char            **sub;
     char            **paths;
+    int hdoc;
     // char            *prompt;
     char *tmp;// get_cmd_path
     char *palestine; // get_cmd_path
@@ -211,7 +212,9 @@ void ft_exit(int ex);
 /* </Builtins> */
 
 /* <Executer/ft_executer.c> */
-unsigned int execute_ast(t_node *root);
+// unsigned int execute_ast(t_node *root);
+void execution();
+int ft_executer(t_node *root);
 
 /* </Executer/ft_executer.c> */
 
