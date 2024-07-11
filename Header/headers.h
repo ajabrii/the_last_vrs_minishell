@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/09 16:31:46 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:00:21 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <signal.h>
 # include <limits.h>
 # include "../Libft/libft.h"
+
+# include <termios.h>
 
 /*colors*/
 # define RED "\033[30;31m"
@@ -132,6 +134,8 @@ typedef struct s_shell
     char *palestine; // get_cmd_path
     t_env *envl;
     t_leak          *leaks;
+
+    struct termios	original_term;
 } g_shell;
 
 extern g_shell neobash;

@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/09 16:45:25 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:07:17 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,10 @@ void ft_init_io(t_node *root)
     io = root->iol;
     while (io)
     {
-        printf("[%s]-[%d]\n", io->value, io->type);
+        // printf("[%s]-[%d]\n", io->value, io->type);
         if (io->type == HERE_DOC)
         {
-            printf("Hello \n");
+            // printf("Hello \n");
             neobash.hdoc = 0;
             pipe(fd);
             pid = fork();
@@ -158,6 +158,11 @@ unsigned int ex_cmd(t_node *root)
             if (fd < 0)
                 return (2);
             dup2(fd, STDOUT_FILENO);
+        }
+        if (!ft_strncmp(root->args, "env", 3))
+        {
+            ft_env(neobash.envl);
+            exit(0);
         }
         execve(cmdpath, args, neobash.envp);
         printf("neobash: command not found: %s\n", args[0]);
@@ -252,6 +257,7 @@ void execution()
 {
     if (!neobash.tree)
         return;
+    // tcsetattr(STDIN_FILENO, TCSANOW, &neobash.original_term);
     ft_before_exec(neobash.tree);
     neobash.status = ft_executer(neobash.tree);
 }

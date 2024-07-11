@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/07/09 15:52:27 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/11 15:48:10 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_node *ft_scmd()
         }
         else if (is_io())
         {
-            printf(RED"[[[  %d ]]][`%s']\n"RES, neobash.cur_tok->type, neobash.cur_tok->value);
+            // printf(RED"[[[  %d ]]][`%s']\n"RES, neobash.cur_tok->type, neobash.cur_tok->value);
             if (!create_iol(&result->iol, get_type(neobash.cur_tok->type)))
                 return (free(result->args), free(result), NULL);
         }

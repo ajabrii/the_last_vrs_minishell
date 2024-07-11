@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/09 16:28:16 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:09:01 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void print_ast(t_node *root) {
 /*88888888888888*/
 void    ft_init_neobash(char **env)
 {
-    (void)env;
+    // (void)env;
+    neobash.envp = env;
     get_env_list(env);
     neobash.prs_state = 0;
     neobash.hdoc = 1;
