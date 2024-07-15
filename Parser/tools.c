@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 17:23:57 by kali              #+#    #+#             */
-/*   Updated: 2024/06/26 09:18:56 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/15 06:05:10 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ bool is_pair()
 
 bool is_io()
 {
-    if (neobash.cur_tok->type == APPEND || neobash.cur_tok->type == REDIRECT
-            || neobash.cur_tok->type == INPUT || neobash.cur_tok->type == HEREDOC)
+    if (!neobash.cur_tok)
+        return (false);
+    if (neobash.cur_tok->type == APPEND || neobash.cur_tok->type == REDIRECT || neobash.cur_tok->type == INPUT || neobash.cur_tok->type == HEREDOC)
         return (true);
     else
         return (false);

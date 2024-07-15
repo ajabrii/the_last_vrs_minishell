@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/07/11 15:48:10 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/15 06:53:37 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_node *ft_scmd()
         }
         else if (is_io())
         {
+            // printf("IO\n");
             // printf(RED"[[[  %d ]]][`%s']\n"RES, neobash.cur_tok->type, neobash.cur_tok->value);
             if (!create_iol(&result->iol, get_type(neobash.cur_tok->type)))
                 return (free(result->args), free(result), NULL);
@@ -65,6 +66,7 @@ t_node *ft_scmd()
 t_node *ft_left_hand()
 {
     t_node *result;
+    t_node *tmp;
 
     if (neobash.prs_state || !neobash.cur_tok)
         return (NULL);
@@ -72,6 +74,7 @@ t_node *ft_left_hand()
         return (set_state(1), NULL);
     else if (neobash.cur_tok->type == L_PARENT)
     {
+        neobash.flag = 1;
         ft_skip_tok();
         result = ft_rdp(0);
         if (!result)
@@ -79,6 +82,12 @@ t_node *ft_left_hand()
         if (!neobash.cur_tok || neobash.cur_tok->type != R_PARENT)
             return (set_state(1), NULL);
         ft_skip_tok();
+        printf(RED "[%s]-[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type);
+        if (neobash.cur_tok)
+        {
+            tmp = ft_rdp(7);
+            result->iol = tmp->iol;
+        }
         return (result);
     }
     else

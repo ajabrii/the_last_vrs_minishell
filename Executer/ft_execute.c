@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/11 16:07:17 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/13 13:19:32 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 char	*get_cmd_path(char **paths, char *cmd)
 {
-	if (cmd[0] == '.')
-	{
+    printf("`%s'\n", cmd);
+    if (!cmd)
+        return (NULL);
+    if (cmd[0] == '.')
+    {
 		if (access(cmd, X_OK) == 0)
 			return (cmd);
 	}
@@ -62,7 +65,7 @@ bool	ft_is_delimiter(char *delimiter, char *str)
 	return (!*delimiter);
 }
 
-void	heredoc_f(t_io *io, int p[2])
+void	heredoc_f(t_io *io)
 {
 	char	*line;
 	char	*quotes;
@@ -79,17 +82,17 @@ void	heredoc_f(t_io *io, int p[2])
 			break ;
 		else
 		{
-			ft_putstr_fd(line, p[1]);
-			ft_putstr_fd("\n", p[1]);
+			ft_putstr_fd(line, neobash.fd[1]);
+			ft_putstr_fd("\n", neobash.fd[1]);
 		}
 	}
-	// ft_clean_ms();
-	exit(0);
+	// leaks
+	// exit(0);
 }
+//_____________________________________________________________________
 
 void ft_init_io(t_node *root)
 {
-    int fd[2];
     pid_t pid;
     t_io *io;
 
@@ -103,13 +106,20 @@ void ft_init_io(t_node *root)
         if (io->type == HERE_DOC)
         {
             // printf("Hello \n");
-            neobash.hdoc = 0;
-            pipe(fd);
+            // neobash.hdoc = 0;
+            pipe(neobash.fd);
             pid = fork();
             if (!pid)
-                heredoc_f(io, fd);
+            {
+                heredoc_f(io);
+                // exit(0);
+            }
             else
+            {
                 waitpid(pid, NULL, 0);
+                close(neobash.fd[1]);
+                close(neobash.fd[0]);
+            }
         }
         // else
         // {
@@ -130,8 +140,8 @@ void ft_before_exec(t_node *root)
     if (tp == PIPE_N || tp == OR_N || tp == AND_N)
     {
         ft_before_exec(root->left);
-        if (neobash.hdoc)
-            ft_before_exec(root->right);
+        // if (neobash.hdoc)
+        ft_before_exec(root->right);
     }
     else
         ft_init_io(root);
@@ -145,33 +155,37 @@ unsigned int ex_cmd(t_node *root)
     int fd;
 
     fd = 0;
-    args = ft_split(root->args, ' ');
-    cmdpath = get_cmd_path(neobash.paths, args[0]);
-    // printf("path-[%s]\n", cmdpath);
-    pid = fork();
-    if (!pid)
+    if (root->args)
     {
-        if (root->iol)
+        args = ft_split(root->args, ' ');
+        // if (!args)
+            // printf("segfault\n");
+        cmdpath = get_cmd_path(neobash.paths, args[0]);
+        pid = fork();
+        if (!pid)
         {
-            if (root->iol->type == OUT)
-                fd = open(root->iol->value, O_CREAT | O_RDWR , 0644);
-            if (fd < 0)
-                return (2);
-            dup2(fd, STDOUT_FILENO);
+            if (root->iol)
+            {
+                if (root->iol->type == OUT)
+                    fd = open(root->iol->value, O_CREAT | O_RDWR , 0644);
+                if (fd < 0)
+                    return (2);
+                dup2(fd, STDOUT_FILENO);
+            }
+            if (!ft_strncmp(root->args, "env", 3))
+            {
+                ft_env(neobash.envl);
+                exit(0);
+            }
+            execve(cmdpath, args, neobash.envp);
+            printf("neobash: command not found: %s\n", args[0]);
+            return (127);
         }
-        if (!ft_strncmp(root->args, "env", 3))
+        else
         {
-            ft_env(neobash.envl);
-            exit(0);
+            wait(NULL);
+            return (0);
         }
-        execve(cmdpath, args, neobash.envp);
-        printf("neobash: command not found: %s\n", args[0]);
-        return (127);
-    }
-    else
-    {
-        wait(NULL);
-        return (0);
     }
     return (0);
 }
@@ -257,7 +271,6 @@ void execution()
 {
     if (!neobash.tree)
         return;
-    // tcsetattr(STDIN_FILENO, TCSANOW, &neobash.original_term);
     ft_before_exec(neobash.tree);
     neobash.status = ft_executer(neobash.tree);
 }

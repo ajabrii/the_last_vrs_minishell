@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/11 16:09:01 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/15 06:53:25 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,22 +103,35 @@ void    ft_init_neobash(char **env)
     get_env_list(env);
     neobash.prs_state = 0;
     neobash.hdoc = 1;
+    neobash.flag = 0;
     neobash.paths = grep_paths(env);
     // neobash.prompt = NULL;
 }
 /*lldld*/
 void    ft_syntax_after()
 {
+    int flag;
+
+    flag = 0;
     if (neobash.prs_state == 1)
     {
         if (!neobash.cur_tok)
         {
-        printf("neobash: syntax error near unexpected token `%s'\n", "newline");
-        // free_tree();
-        return ;
+            printf("neobash: syntax error near unexpected token `%s'\n", "newline");
+            // free_tree();
+            return ;
         }
-        printf("neobash: syntax error near unexpected token `%s'\n", neobash.cur_tok->value);
-        // free_tree();
+        if (neobash.flag == 1 && is_io(neobash.cur_tok->next->type))
+        {
+            neobash.prs_state = 0;
+            flag = 1;
+        }
+        if (!flag)
+        {
+            // printf(RED "[%s]-[%d]--[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type, neobash.flag);
+            printf("neobash: syntax error near unexpected token `%s'\n", neobash.cur_tok->value);
+            // free_tree();
+        }
     }
     return;
 }
@@ -135,9 +148,11 @@ void neoshell()
             continue;
         neobash.tree = ft_parser();
         // print_ast(neobash.tree);
+        // printf(RED "[%s]-[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type);
         if (neobash.prs_state)
         {
             ft_syntax_after();
+            // printf("HEre\n");
             neobash.prs_state = 0;
             continue;
         }

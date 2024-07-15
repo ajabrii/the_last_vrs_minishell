@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/11 16:00:21 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/15 06:09:51 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <signal.h>
 # include <limits.h>
 # include "../Libft/libft.h"
+# include <limits.h>
 
-# include <termios.h>
 
 /*colors*/
 # define RED "\033[30;31m"
@@ -133,9 +133,10 @@ typedef struct s_shell
     char *tmp;// get_cmd_path
     char *palestine; // get_cmd_path
     t_env *envl;
-    t_leak          *leaks;
+    int flag;
+    t_leak *leaks;
+    int             fd[2];
 
-    struct termios	original_term;
 } g_shell;
 
 extern g_shell neobash;
