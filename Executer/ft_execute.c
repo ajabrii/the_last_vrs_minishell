@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/16 16:56:50 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/16 17:16:30 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,10 +293,11 @@ unsigned int ex_cmd(t_node *root)
                 printf("exit\n");
                 exit(ex);
             }
-            if (!ft_strncmp(root->args, "env", 3))
+            if (is_builtin(root)) // TO DO
             {
-                ft_env(neobash.envl);
-                exit(0);
+                ex = ex_builtins(root); // TO DO
+                if (ex)
+                    exit(ex);
             }
             execve(cmdpath, args, neobash.envp);
             printf("neobash: command not found: %s\n", args[0]);
