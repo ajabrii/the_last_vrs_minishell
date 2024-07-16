@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytarhoua <ytarhoua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/02 12:36:18 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/07 13:40:33 by ytarhoua         ###   ########.fr       */
+/*   Created: 2024/06/14 19:57:56 by kali              #+#    #+#             */
+/*   Updated: 2024/07/01 10:20:03 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,6 @@ t_env	*ft_env_lstnew(char *var)
 	return (lst);
 }
 
-t_env	*ft_envlst_new(char *key, char *value)
-{
-	t_env	*new;
-
-	new = (t_env*)malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	new->key = ft_strdup(key);
-	if (value)
-		new->value = ft_strdup(value);
-	new->next = NULL;
-	return (new);
-}
-
 t_env	*ft_env_lstlast(t_env *lst)
 {
 	t_env	*tmp;
@@ -94,6 +80,8 @@ void ft_env_lstadd_back(t_env **lst, t_env *newx)
 		*lst = newx;
 }
 
+
+
 void    get_env_list(char **env)
 {
     int i;
@@ -106,7 +94,7 @@ void    get_env_list(char **env)
         i++;
     }
     // shell.size = i;
-    // ft_env(neobash.envl);
+    // ft_env();
 }
 
 void    ft_env(t_env *env)

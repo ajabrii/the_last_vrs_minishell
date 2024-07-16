@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/13 13:19:32 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:56:50 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,30 +147,151 @@ void ft_before_exec(t_node *root)
         ft_init_io(root);
 }
 
+
+int	ft_out(t_io *io)
+{
+	int		fd;
+    int     ex;
+
+    ex = 0;
+    // if (!io->expanded_value || io->expanded_value[1])
+    // {
+    // 	ex = ft_err_msg(
+    // 			(t_err){ENO_GENERAL, ERRMSG_AMBIGUOUS, io_list->value});
+    // 	return (*status);
+    // }
+    fd = open(io->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    printf(ORG"{``%d''}\n"RES, fd);
+    if (fd == -1)
+    {
+		// ex = ft_err_msg(ft_check_write(io->value));
+		return (ex);
+	}
+	dup2(fd, STDOUT_FILENO);
+	// close(fd);
+	ex = 0;
+	return (ex);
+}
+
+int	ft_in(t_io *io)
+{
+	int		fd;
+    int     ex;
+
+    ex = 0;
+    // if (!io->expanded_value || io->expanded_value[1])
+    // {
+    // 	ex = ft_err_msg(
+    // 			(t_err){ENO_GENERAL, ERRMSG_AMBIGUOUS, io_list->value});
+    // 	return (*status);
+    // }
+    fd = open(io->value, O_RDONLY);
+	if (fd == -1)
+	{
+        // ex = ft_err_msg(ft_check_write(io->value)); msg
+        return (ex);
+    }
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	ex = 0;
+	return (ex);
+}
+
+int	ft_app(t_io *io)
+{
+	int		fd;
+    int     ex;
+
+    ex = 0;
+    // if (!io->expanded_value || io->expanded_value[1])
+    // {
+    // 	ex = ft_err_msg(
+    // 			(t_err){ENO_GENERAL, ERRMSG_AMBIGUOUS, io_list->value});
+    // 	return (*status);
+    // }
+    fd = open(io->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (fd == -1)
+	{
+        // ex = ft_err_msg(ft_check_write(io->value)); msg
+        return (ex);
+    }
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	ex = 0;
+	return (ex);
+}
+
+int ft_io(t_node *root)
+{
+    t_io *tmp_io;
+    int ex;
+
+    tmp_io = root->iol;
+    ex = 0;
+    while (tmp_io)
+    {
+        if (tmp_io->type == OUT)
+        {
+            ex = ft_out(tmp_io);
+            if (ex)
+                return (ex);
+        }
+        else if (tmp_io->type == IN)
+        {
+            ex = ft_in(tmp_io);
+            if (ex)
+                return (ex);
+        }
+        else if (tmp_io->type == APP)
+        {
+            ex = ft_app(tmp_io);
+            if (ex)
+                return (ex);
+        }
+        tmp_io = tmp_io->next;
+    }
+    return (0);
+}
+
+void	ft_reset_stds()
+{
+	// if (piped)
+	// 	return ;
+	// printf("{%d}\n",neobash.in);
+	dup2(neobash.in, 0);
+	dup2(neobash.out, 1);
+}
+
 unsigned int ex_cmd(t_node *root)
 {
     char **args;
     char *cmdpath;
     pid_t pid;
-    int fd;
+    // int fd;
+    int ex;
 
-    fd = 0;
+    // fd = 0;
+
+    // if (root->iol)
+    // {
+    //     ex = ft_io(root);
+    //     return (ft_reset_stds(), ex);
+    // }
     if (root->args)
     {
-        args = ft_split(root->args, ' ');
+    // ex = 0;
         // if (!args)
             // printf("segfault\n");
-        cmdpath = get_cmd_path(neobash.paths, args[0]);
         pid = fork();
         if (!pid)
         {
-            if (root->iol)
+            args = ft_split(root->args, ' ');
+            cmdpath = get_cmd_path(neobash.paths, args[0]);
+            ex =ft_io(root);
+            if (ex)
             {
-                if (root->iol->type == OUT)
-                    fd = open(root->iol->value, O_CREAT | O_RDWR , 0644);
-                if (fd < 0)
-                    return (2);
-                dup2(fd, STDOUT_FILENO);
+                printf("exit\n");
+                exit(ex);
             }
             if (!ft_strncmp(root->args, "env", 3))
             {
