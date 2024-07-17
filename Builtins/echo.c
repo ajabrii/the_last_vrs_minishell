@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytarhoua <ytarhoua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 12:36:11 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/06 18:00:39 by ytarhoua         ###   ########.fr       */
+/*   Updated: 2024/07/17 06:53:55 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void ft_echo(char *s)
     bool nl = false;
     bool sq = false;
     bool dq = false;
-    int count = 0;
+    // int count = 0;
     int i = 0;
 
     i = param(s);

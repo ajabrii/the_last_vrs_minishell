@@ -7,7 +7,7 @@ char	*get_env_val(char *key)
 	envlst = neobash.envl;
 	while (envlst)
 	{
-		if (!ft_strcmp(key, envlst->key))
+		if (!ft_strncmp(key, envlst->key, ft_strlen(envlst->key)))
 			return (envlst->value);
 		envlst = envlst->next;
 	}

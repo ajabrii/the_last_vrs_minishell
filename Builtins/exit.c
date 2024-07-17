@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:30:01 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/01 14:27:55 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 07:20:32 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void    ft_exit(int ex)
 {
-    ft_free_all();
+    // ft_free_all();
     exit(ex);
+    printf("exit\n");
 }

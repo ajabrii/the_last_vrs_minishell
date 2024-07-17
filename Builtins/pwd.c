@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytarhoua <ytarhoua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:31:18 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/13 13:50:28 by ytarhoua         ###   ########.fr       */
+/*   Updated: 2024/07/17 07:13:41 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../Header/headers.h"
 
-t_env *search_env(char *s)
+t_env *search_envl(char *s)
 {
     t_env *env = neobash.envl;
     t_env *tmp = env;
@@ -20,8 +20,8 @@ t_env *search_env(char *s)
     while (tmp)
     {
         if (!ft_strncmp(s, tmp->key, ft_strlen(s)))
-            return (tmp->value);
-        tmp->next;
+            return (tmp);
+        tmp = tmp->next;
     }
     tmp = env;
     return (NULL);
@@ -36,9 +36,10 @@ int option(char *str)
     i = 0;
     while (str[i])
     {
-        if (str[i] == '-'){
+        if (str[i] == '-')
+        {
             i++;
-            printf("bash: pwd: '%s': invalid option", str[i]);
+            // printf("bash: pwd: '%s': invalid option", str[i]);
             return (1);
         }
         i++;
@@ -51,7 +52,7 @@ int option(char *str)
 void ft_pwd(char *s)
 {
     option(s);
-    t_env *v = search_env(s);
+    t_env *v = search_envl(s);
     if (v->value)
         ft_putstr_fd(v->value, 1);
     if (v == NULL)
@@ -61,5 +62,6 @@ void ft_pwd(char *s)
 		    return;
 	    ft_putstr_fd(v->value, 1);
     }
+        // printf("hello\n");
 	ft_putstr_fd("\n", 1);
 }

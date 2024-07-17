@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/16 16:08:42 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/17 07:05:51 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ typedef struct s_shell
     int             fd[2];
     int in;
     int out;
+    int count;
 
 } g_shell;
 
@@ -214,8 +215,18 @@ void    ft_addback_io_node(t_io **iop, t_io *new);
 /* </Parsing/putils.c> */
 
 /* <Builtins> */
-void    ft_env(t_env *env);
+void bt_cd(char *s);
+void ft_echo(char *s);
+void ft_env(t_env *env);
 void ft_exit(int ex);
+int ft_export(char *s);
+void ft_pwd(char *s);
+void ft_unset(char *s);
+void update_env(char *key, char *value);
+void exp_back(t_env *new);
+t_env *exp_new(char *key, char *value);
+void update_env(char *key, char *value);
+char *get_env_val(char *key);
 /* </Builtins> */
 
 /* <Executer/ft_executer.c> */
@@ -228,4 +239,5 @@ int ft_executer(t_node *root);
 /* <Main> */
 char    **grep_paths(char **env);
 /* </Main> */
+
 #endif

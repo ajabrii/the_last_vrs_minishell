@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/16 17:16:30 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/17 07:29:03 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int	ft_out(t_io *io)
     // 	return (*status);
     // }
     fd = open(io->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-    printf(ORG"{``%d''}\n"RES, fd);
+    // printf(ORG"{``%d''}\n"RES, fd);
     if (fd == -1)
     {
 		// ex = ft_err_msg(ft_check_write(io->value));
@@ -262,6 +262,57 @@ void	ft_reset_stds()
 	dup2(neobash.out, 1);
 }
 
+bool is_builtin(t_node *root)
+{
+    if (!ft_strncmp(root->args,"cd", 2))
+        return (true);
+    if (!ft_strncmp(root->args,"env", 3))
+        return (true);
+    if (!ft_strncmp(root->args,"exit", 4))
+        return (true);
+    if (!ft_strncmp(root->args,"pwd", 3))
+        return (true);
+    if (!ft_strncmp(root->args,"unset", 5))
+        return (true);
+    if (!ft_strncmp(root->args,"echo", 4))
+        return (true);
+    if (!ft_strncmp(root->args,"export", 6))
+        return (true);
+    else
+        return (false);
+}
+
+int     ex_builtins(t_node *root)
+{
+    if (!ft_strncmp(root->args,"cd", 2))
+    {
+        bt_cd(root->args);
+        return (0);
+    }
+    if (!ft_strncmp(root->args,"env", 3))
+        return (ft_env(neobash.envl), 0);
+    if (!ft_strncmp(root->args,"exit", 4))
+    {
+        printf("here [%s]\n", root->args);
+        ft_exit(0);
+        return (0);
+    }
+    if (!ft_strncmp(root->args,"pwd", 3))
+    {
+        printf("here [%s]\n", root->args);
+        ft_pwd(root->args);
+        return (0);
+    }
+    if (!ft_strncmp(root->args,"unset", 5))
+        return (ft_unset(root->args), 0);
+    if (!ft_strncmp(root->args,"echo", 4))
+        return (ft_echo(root->args), 0);
+    if (!ft_strncmp(root->args,"export", 6))
+        return (ft_export(root->args), 0);
+    else
+        return (1);
+}
+
 unsigned int ex_cmd(t_node *root)
 {
     char **args;
@@ -282,6 +333,13 @@ unsigned int ex_cmd(t_node *root)
     // ex = 0;
         // if (!args)
             // printf("segfault\n");
+        if (is_builtin(root)) // TO DO
+        {
+            printf("here1\n");
+            ex = ex_builtins(root); // TO DO
+            if (ex)
+                exit(ex);
+        }
         pid = fork();
         if (!pid)
         {
@@ -293,15 +351,12 @@ unsigned int ex_cmd(t_node *root)
                 printf("exit\n");
                 exit(ex);
             }
-            if (is_builtin(root)) // TO DO
+            else
             {
-                ex = ex_builtins(root); // TO DO
-                if (ex)
-                    exit(ex);
+                execve(cmdpath, args, neobash.envp);
+                printf("neobash: command not found: %s\n", args[0]);
+                return (127);
             }
-            execve(cmdpath, args, neobash.envp);
-            printf("neobash: command not found: %s\n", args[0]);
-            return (127);
         }
         else
         {

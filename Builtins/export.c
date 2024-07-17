@@ -71,7 +71,7 @@ bool search_env(char *s)
 
     while (tmp)
     {
-        if (!ft_strcmp(s, tmp->key))
+        if (!ft_strncmp(s, tmp->key, ft_strlen(tmp->key)))
             return (true);
         tmp = tmp->next;
     }
