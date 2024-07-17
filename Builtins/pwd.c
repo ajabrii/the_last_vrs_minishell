@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:31:18 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/17 07:13:41 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 10:12:22 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,15 @@ int option(char *str)
 void ft_pwd(char *s)
 {
     option(s);
-    t_env *v = search_envl(s);
+    t_env *v = search_envl(s);// khassek t fikssi hna pwd makhdamach
+    if (!v)
+        return;
+    printf("segfault v->value [`%p']\n", v);
     if (v->value)
+    {
+        printf("segfault\n");
         ft_putstr_fd(v->value, 1);
+    }
     if (v == NULL)
     {
 	    v->value = getcwd(v->value, 0);

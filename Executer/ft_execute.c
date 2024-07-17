@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/17 07:29:03 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 11:08:55 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,9 @@ int	ft_out(t_io *io)
     // printf(ORG"{``%d''}\n"RES, fd);
     if (fd == -1)
     {
-		// ex = ft_err_msg(ft_check_write(io->value));
-		return (ex);
+		printf("neobash: %s: Permission denied\n",io->value);
+        ex = 1;
+        return (ex);
 	}
 	dup2(fd, STDOUT_FILENO);
 	// close(fd);
@@ -188,7 +189,8 @@ int	ft_in(t_io *io)
     fd = open(io->value, O_RDONLY);
 	if (fd == -1)
 	{
-        // ex = ft_err_msg(ft_check_write(io->value)); msg
+        printf("neobash: %s: Permission denied\n",io->value);
+        ex = 1;
         return (ex);
     }
 	dup2(fd, STDIN_FILENO);
@@ -213,6 +215,8 @@ int	ft_app(t_io *io)
 	if (fd == -1)
 	{
         // ex = ft_err_msg(ft_check_write(io->value)); msg
+        printf("neobash: %s: Permission denied\n",io->value);
+        ex = 1;
         return (ex);
     }
 	dup2(fd, STDOUT_FILENO);
@@ -340,29 +344,33 @@ unsigned int ex_cmd(t_node *root)
             if (ex)
                 exit(ex);
         }
-        pid = fork();
-        if (!pid)
+        else
         {
-            args = ft_split(root->args, ' ');
-            cmdpath = get_cmd_path(neobash.paths, args[0]);
-            ex =ft_io(root);
-            if (ex)
+            pid = fork();
+            if (!pid)
             {
-                printf("exit\n");
-                exit(ex);
+                args = ft_split(root->args, ' ');
+                cmdpath = get_cmd_path(neobash.paths, args[0]);
+                ex =ft_io(root);
+                if (ex)
+                {
+                    printf("exit\n");
+                    exit(ex);
+                }
+                else
+                {
+                    execve(cmdpath, args, neobash.envp);
+                    printf("neobash: command not found: %s\n", args[0]);
+                    return (127);
+                }
             }
             else
             {
-                execve(cmdpath, args, neobash.envp);
-                printf("neobash: command not found: %s\n", args[0]);
-                return (127);
+                wait(NULL);
+                return (0);
             }
         }
-        else
-        {
-            wait(NULL);
-            return (0);
-        }
+
     }
     return (0);
 }

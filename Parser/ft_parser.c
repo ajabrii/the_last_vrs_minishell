@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:58:34 by kali              #+#    #+#             */
-/*   Updated: 2024/07/15 06:53:37 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 10:57:30 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ t_node *ft_left_hand()
         if (!neobash.cur_tok || neobash.cur_tok->type != R_PARENT)
             return (set_state(1), NULL);
         ft_skip_tok();
-        printf(RED "[%s]-[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type);
-        if (neobash.cur_tok)
+        // printf(RED "[%s]-[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type);
+        if (neobash.cur_tok && !is_pair())
         {
-            tmp = ft_rdp(7);
+            tmp = ft_rdp(5);
             result->iol = tmp->iol;
         }
         return (result);
