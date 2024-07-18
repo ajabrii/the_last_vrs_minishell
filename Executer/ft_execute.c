@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/17 11:08:55 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 18:06:01 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,8 @@ bool is_builtin(t_node *root)
         return (true);
     if (!ft_strncmp(root->args,"export", 6))
         return (true);
+    if (!ft_strncmp(root->args,"./minishell", 11))
+        return (true);
     else
         return (false);
 }
@@ -313,6 +315,8 @@ int     ex_builtins(t_node *root)
         return (ft_echo(root->args), 0);
     if (!ft_strncmp(root->args,"export", 6))
         return (ft_export(root->args), 0);
+    if (!ft_strncmp(root->args,"./minishell", 11))
+        return (update_env("SHLVL", ft_itoa(++neobash.level)), 0);
     else
         return (1);
 }

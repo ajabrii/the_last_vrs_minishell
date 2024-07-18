@@ -23,6 +23,22 @@ static int	ft_export_err_msg(char *identifier)
 	return (1);
 }
 
+
+void	print_ex(t_env *env)
+{
+	while (env)
+	{
+			printf("declare -x ");
+			printf("%s", env->key);
+			if (env->value)
+				printf("=\"%s\"\n", env->value);
+			else
+				printf("\n");
+		env = env->next;
+	}
+}
+
+
 int	parse_key(char *str)
 {
 	int	i;
@@ -117,8 +133,11 @@ int	ft_export(char *s)
 
 	exit = 0;
     i = 7;
-	// if (!s)
-	// 	return (1);
+	if (!(s[i - 1]))
+	{
+		print_ex(neobash.envl);
+		return (1);
+	}
 	while (&s[i] && s[i])
 	{
 		printf("entry is ::%s\n", &s[i]);
@@ -145,5 +164,4 @@ int	ft_export(char *s)
 	}
     return(exit);
 }
-
 // "hello = ok oki =" --> hello=ok oki == and that's error!!!

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/17 07:05:51 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 17:34:47 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct s_shell
     int in;
     int out;
     int count;
+    int level;
 
 } g_shell;
 
@@ -215,7 +216,7 @@ void    ft_addback_io_node(t_io **iop, t_io *new);
 /* </Parsing/putils.c> */
 
 /* <Builtins> */
-void bt_cd(char *s);
+int bt_cd(char *s);
 void ft_echo(char *s);
 void ft_env(t_env *env);
 void ft_exit(int ex);

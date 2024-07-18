@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/16 16:09:09 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/17 17:49:36 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void    ft_init_neobash(char **env)
     neobash.in = dup(0);
 	neobash.out = dup(1);
     neobash.paths = grep_paths(env);
+    neobash.level = 1;
     // neobash.prompt = NULL;
 }
 /*lldld*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 12:35:31 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/17 07:01:15 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 11:42:58 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void ft_unset(char *s)
     if (!ft_strncmp(s, "unset", 5))
     {
         s += 5;
+        while (*(s) == ' ' && *(s))
+            s++;
+        printf ("str is ::%s\n", s);
         while (tmp)
         {
             if (!ft_strncmp(s, tmp->key, ft_strlen(s)))

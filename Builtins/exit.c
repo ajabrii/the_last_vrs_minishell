@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:30:01 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/17 07:20:32 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 18:05:50 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 void    ft_exit(int ex)
 {
+    if (neobash.level > 1)
+    {
+        neobash.level -= 1;
+        // printf("level d::%i\n", neobash.level);
+        update_env("SHLVL", ft_itoa(neobash.level));
+    }
+    ft_env(neobash.envl);
     // ft_free_all();
     exit(ex);
     printf("exit\n");

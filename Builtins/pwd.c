@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:31:18 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/17 10:12:22 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/17 11:12:40 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,20 @@ int option(char *str)
 
 void ft_pwd(char *s)
 {
-    option(s);
-    t_env *v = search_envl(s);// khassek t fikssi hna pwd makhdamach
-    if (!v)
+    if (option(s))
         return;
-    printf("segfault v->value [`%p']\n", v);
-    if (v->value)
+    char *path;
+    path = get_env_val("PWD");
+    // printf ("str is ::%s\n", s);
+    // printf("v->value is ::%s\n", path);
+    if (path)
+        ft_putstr_fd(path, 1);
+    if (path == NULL)
     {
-        printf("segfault\n");
-        ft_putstr_fd(v->value, 1);
-    }
-    if (v == NULL)
-    {
-	    v->value = getcwd(v->value, 0);
-	    if (!v->value)
+	    path = getcwd(path, 0);
+	    if (!path)
 		    return;
-	    ft_putstr_fd(v->value, 1);
+	    ft_putstr_fd(path, 1);
     }
-        // printf("hello\n");
 	ft_putstr_fd("\n", 1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytarhoua <ytarhoua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 20:58:07 by ytarhoua          #+#    #+#             */
-/*   Updated: 2024/07/03 18:49:59 by ytarhoua         ###   ########.fr       */
+/*   Updated: 2024/07/17 11:13:02 by venom            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,16 @@
 // 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 // }
 
+int	update_pwd(void)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (1);
+	return (update_env("PWD", cwd), 0);
+}
+
 int skip(char *s)
 {
     int i = 0;
@@ -86,7 +96,7 @@ int skip(char *s)
     return (i);
 }
 
-void bt_cd(char *s)
+int bt_cd(char *s)
 {
     int i;
     char *str;
@@ -97,8 +107,8 @@ void bt_cd(char *s)
     {
         chdir("/home");
         update_env("OLDPWD", get_env_val("PWD"));
-        update_env("PWD", "/home");
-        return;
+        // update_env("PWD", "/home");
+        return (update_pwd(), 0);
     }
     s += i;
     if (s[0] && s[0] == '~')
@@ -107,21 +117,16 @@ void bt_cd(char *s)
         str = ft_strjoin("/home", s);
         chdir(str);
         update_env("OLDPWD", get_env_val("PWD"));
-        update_env("PWD", str);
+        // update_env("PWD", str);
         free(str);
-        return;
+        return (update_pwd(), 0);
     }
     else if(chdir(s) == -1)
     {
         perror("cd");
-        return;
+        return(1);
     }
     update_env("OLDPWD", get_env_val("PWD"));
-    update_env("PWD", s);
+    return (update_pwd(), 0);
     // printf("%s\n", s);
 }
-
-// int main(void)
-// {
-//     bt_cd("cd    /home/user");
-// }
