@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: venom <venom@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/17 18:06:01 by venom            ###   ########.fr       */
+/*   Updated: 2024/07/18 06:28:14 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void ft_init_io(t_node *root)
 
     if (!root)
         return;
-    // root->exp_val = ft_expand(root->args);
+    root->args = ft_expand(root->args);
     io = root->iol;
     while (io)
     {
@@ -299,13 +299,13 @@ int     ex_builtins(t_node *root)
         return (ft_env(neobash.envl), 0);
     if (!ft_strncmp(root->args,"exit", 4))
     {
-        printf("here [%s]\n", root->args);
+        // printf("here [%s]\n", root->args);
         ft_exit(0);
         return (0);
     }
     if (!ft_strncmp(root->args,"pwd", 3))
     {
-        printf("here [%s]\n", root->args);
+        // printf("here [%s]\n", root->args);
         ft_pwd(root->args);
         return (0);
     }
@@ -343,7 +343,7 @@ unsigned int ex_cmd(t_node *root)
             // printf("segfault\n");
         if (is_builtin(root)) // TO DO
         {
-            printf("here1\n");
+            // printf("here1\n");
             ex = ex_builtins(root); // TO DO
             if (ex)
                 exit(ex);
