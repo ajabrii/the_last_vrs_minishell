@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/22 11:29:32 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/22 12:01:25 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,31 +151,117 @@ unsigned int ex_cmd(t_node *root)
     return (0);
 }
 
+// int ft_executer(t_node *root)
+// {
+//     int exit;
+
+//     exit = 1337;
+//     if (root->type == PIPE_N)
+//         return (ex_pipes(root));
+//     else if (root->type == AND_N)
+//     {
+//         if (root->iol)
+//         {
+//             exit = ft_io(root);
+//             if (exit)
+//                 return (exit);
+//         }
+//         exit = ft_executer(root->left);
+//         if (exit == 0)
+//         {
+//             if (root->iol)
+//             {
+//                 ft_reset_stds();
+//                 exit = ft_io(root);
+//                 if (exit) return exit;
+//             }
+//         }
+//         // if (exit == 0)
+//             return (ft_executer(root->right));
+//         ft_reset_stds();
+//         return (exit);
+//     }
+//     else if (root->type == OR_N)
+//     {
+//         if (root->iol)
+//         {
+//             exit = ft_io(root);
+//             if (exit)
+//                 return (exit);
+//         }
+//         exit = ft_executer(root->left);
+//         if (exit != 0)
+//             return (ft_executer(root->right));
+//         return (exit);
+//     }
+//     else
+//         return (ex_cmd(root));
+//     return (exit);
+// }
+
 int ft_executer(t_node *root)
 {
-    int exit;
+    int exit_code;
 
-    exit = 1337;
     if (root->type == PIPE_N)
-        return (ex_pipes(root));
+        return ex_pipes(root);
     else if (root->type == AND_N)
     {
-        exit = ft_executer(root->left);
-        if (exit == 0)
-            return (ft_executer(root->right));
-        return (exit);
+        if (root->iol)
+        {
+            exit_code = ft_io(root);
+            if (exit_code) return exit_code;
+        }
+        exit_code = ft_executer(root->left);
+        if (exit_code == 0)
+        {
+            ft_reset_stds();
+            if (root->iol)
+            {
+                exit_code = ft_io(root);
+                if (exit_code)
+                    return exit_code;
+            }
+            exit_code = ft_executer(root->right);
+        }
+        ft_reset_stds();
+        return exit_code;
     }
     else if (root->type == OR_N)
     {
-        exit = ft_executer(root->left);
-        if (exit != 0)
-            return (ft_executer(root->right));
-        return (exit);
+        if (root->iol)
+        {
+            exit_code = ft_io(root);
+            if (exit_code)
+                return exit_code;
+        }
+        exit_code = ft_executer(root->left);
+        if (exit_code != 0)
+        {
+            ft_reset_stds();
+            if (root->iol)
+            {
+                exit_code = ft_io(root);
+                if (exit_code)
+                    return exit_code;
+            }
+            exit_code = ft_executer(root->right);
+        }
+        ft_reset_stds();
+        return exit_code;
     }
     else
+    {
+        if (root->iol)
+        {
+            exit_code = ft_io(root);
+            if (exit_code)
+                return exit_code;
+        }
         return (ex_cmd(root));
-    return (exit);
+    }
 }
+
 
 void execution()
 {
