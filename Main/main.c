@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:10 by kali              #+#    #+#             */
-/*   Updated: 2024/07/22 11:36:47 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/22 12:13:48 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void neoshell()
         if (!neobash.tokens)
             continue;
         neobash.tree = ft_parser();
-        print_ast(neobash.tree);
+        // print_ast(neobash.tree);
         // printf(RED "[%s]-[%d]\n" RES, neobash.cur_tok->value, neobash.cur_tok->type);
         if (neobash.prs_state)
         {
@@ -161,7 +161,7 @@ void neoshell()
         }
         // neobash.status = execute_ast(neobash.tree);
         execution();
-        printf("Execution result: %d\n", neobash.status);
+        // printf("Execution result: %d\n", neobash.status);
     }
     ft_free_all();
 }

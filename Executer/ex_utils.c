@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 10:22:54 by kali              #+#    #+#             */
-/*   Updated: 2024/07/22 11:13:54 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/22 12:14:08 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_cmd_path(char **paths, char *cmd)
 {
-    printf("`%s'\n", cmd);
+    // printf("`%s'\n", cmd);
     if (!cmd)
         return (NULL);
     if (cmd[0] == '.')

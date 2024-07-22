@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/22 11:29:55 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/22 12:15:17 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define CY "\033[96m"
 # define RES "\033[0m"
 
-#define PROMPT G "🌟::NeoShell~/💎[" ORG "Prompt" RES G "]🗿$\n|~↠$ " RES
+#define PROMPT G "🌟::NeoShell~/💎[" ORG "Prompt" RES G "]🗿|~↠$ " RES
 /*env list*/
 typedef struct s_env
 {
