@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/18 06:21:51 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/22 11:29:55 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,8 +248,18 @@ bool valid_char(char c);
 char *ft_expand(char *str);
 /* <Expand> */
 
-/* <Main> */
+/* <Execution> */
 char    **grep_paths(char **env);
+char *get_cmd_path(char **paths, char *cmd);
+void heredoc_f(t_io *io);
+bool ft_is_delimiter(char *delimiter, char *str);
+void ft_init_io(t_node *root);
+void ft_before_exec(t_node *root);
+int ft_out(t_io *io);
+int ft_in(t_io *io);
+int ft_app(t_io *io);
+int ft_io(t_node *root);
+int ex_pipes(t_node *root);
 /* </Main> */
 
 #endif

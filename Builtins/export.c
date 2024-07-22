@@ -138,7 +138,7 @@ int	ft_export(char *s)
 		print_ex(neobash.envl);
 		return (1);
 	}
-	while (&s[i] && s[i])
+	while (s[i])
 	{
 		printf("entry is ::%s\n", &s[i]);
 		if (parse_key(&s[i]))
