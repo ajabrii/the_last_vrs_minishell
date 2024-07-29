@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/22 12:15:17 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/26 14:57:04 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ char *get_env_val(char *key);
 // unsigned int execute_ast(t_node *root);
 void execution();
 int ft_executer(t_node *root);
+char **get_my_envp();
 
 /* </Executer/ft_executer.c> */
 

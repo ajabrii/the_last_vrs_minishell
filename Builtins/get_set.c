@@ -18,17 +18,19 @@ void	update_env(char *key, char *value)
 {
 	t_env	*envlst;
 
+	// printf("SHlvl\n");
 	envlst = neobash.envl;
-	while (envlst)
+	while (neobash.envl)
 	{
-		if (!ft_strncmp(key, envlst->key, ft_strlen(key)))
+		if (!ft_strncmp(key, neobash.envl->key, ft_strlen(key)))
 		{
 			if (value)
-				envlst->value = ft_strdup(value);
+				neobash.envl->value = ft_strdup(value);
 			return ;
 		}
-		envlst = envlst->next;
+		neobash.envl = neobash.envl->next;
 	}
+	neobash.envl = envlst;
 }
 
 t_env	*exp_new(char *key, char *value)

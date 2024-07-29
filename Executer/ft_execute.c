@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/22 12:01:25 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/29 15:48:43 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ bool is_builtin(t_node *root)
         return (true);
     if (!ft_strncmp(root->args,"export", 6))
         return (true);
-    if (!ft_strncmp(root->args,"./minishell", 11))
-        return (true);
     else
         return (false);
 }
@@ -87,8 +85,6 @@ int     ex_builtins(t_node *root)
         return (ft_echo(root->args), 0);
     if (!ft_strncmp(root->args,"export", 6))
         return (ft_export(root->args), 0);
-    if (!ft_strncmp(root->args,"./minishell", 11))
-        return (update_env("SHLVL", ft_itoa(++neobash.level)), 0);
     else
         return (1);
 }
@@ -96,6 +92,7 @@ int     ex_builtins(t_node *root)
 unsigned int ex_cmd(t_node *root)
 {
     char **args;
+    char **my_envp;
     char *cmdpath;
     pid_t pid;
     // int fd;
@@ -122,11 +119,27 @@ unsigned int ex_cmd(t_node *root)
         }
         else
         {
+
+            args = ft_split(root->args, ' ');
+            if (!ft_strncmp(args[0], "./minishell", 12))
+            {
+
+                // printf(RED "`%s'\n" RES, args[0]);
+                update_env("SHLVL", ft_itoa(++neobash.level));
+                // printf("[%s]\n",get_env_val("SHLVL"));
+                // ft_env(neobash.envl);
+            }
+            cmdpath = get_cmd_path(neobash.paths, args[0]);
+            if (!cmdpath)
+            {
+                printf("neobash: command not found: %s\n", args[0]);
+                return (127);
+            }
+            update_env("_", cmdpath);
+            // add the builtins !!!
             pid = fork();
             if (!pid)
             {
-                args = ft_split(root->args, ' ');
-                cmdpath = get_cmd_path(neobash.paths, args[0]);
                 ex =ft_io(root);
                 if (ex)
                 {
@@ -135,9 +148,14 @@ unsigned int ex_cmd(t_node *root)
                 }
                 else
                 {
-                    execve(cmdpath, args, neobash.envp);
-                    printf("neobash: command not found: %s\n", args[0]);
-                    return (127);
+                    // convert the env_list into a double pointer !!!
+                    // printf(G"`%s'"RES, cmdpath);
+                    // printf(G"%s\n"RES,get_env_val("_"));
+                    // printf(ORG"%s\n"RES,get_env_val("_"));
+                    // printf("hello world\n");
+                    my_envp = get_my_envp();
+                    execve(cmdpath, args, my_envp);
+                    // print an error
                 }
             }
             else
@@ -270,4 +288,3 @@ void execution()
     ft_before_exec(neobash.tree);
     neobash.status = ft_executer(neobash.tree);
 }
-

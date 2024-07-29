@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   exputils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 06:20:30 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/18 06:20:31 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/07/25 16:46:51 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,11 @@ char	*handle_dollar(char *str, int *i)
 
 	// printf("here\n");
 	(*i)++;
-	// if (str[i] == '?')
-		// return ();//here i have to put exit status
+	if (str[*i] == '?')
+	{
+		(*i)++;
+		return (ft_itoa(neobash.status));
+	}
 	if (str[*i] == '$')
 	{
 		(*i)++;
@@ -78,7 +81,7 @@ char	*handle_dollar(char *str, int *i)
 	}
 	if (!valid_char(str[*i]))
 	{
-		printf("empty\n");
+		// printf("empty\n");
 		return (ft_strdup(""));
 	}
 	start = *i;
