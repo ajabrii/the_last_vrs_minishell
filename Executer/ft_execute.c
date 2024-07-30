@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 10:08:37 by ajabri            #+#    #+#             */
-/*   Updated: 2024/07/29 15:48:43 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/30 15:34:25 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ unsigned int ex_cmd(t_node *root)
     if (root->args)
     {
     // ex = 0;
+    // ls -la ft.c g*kali.c
+    //expand_astir(root->args)
         // if (!args)
             // printf("segfault\n");
         if (is_builtin(root)) // TO DO
@@ -120,7 +122,8 @@ unsigned int ex_cmd(t_node *root)
         else
         {
 
-            args = ft_split(root->args, ' ');
+            args = ft_splitv2(root->args);
+            args[0] = ft_quotes_trimer(args[0]);
             if (!ft_strncmp(args[0], "./minishell", 12))
             {
 

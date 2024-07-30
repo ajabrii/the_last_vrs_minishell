@@ -6,7 +6,7 @@
 /*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:41:39 by kali              #+#    #+#             */
-/*   Updated: 2024/07/26 14:57:04 by kali             ###   ########.fr       */
+/*   Updated: 2024/07/30 15:34:10 by kali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,8 @@ int ft_in(t_io *io);
 int ft_app(t_io *io);
 int ft_io(t_node *root);
 int ex_pipes(t_node *root);
+char **ft_splitv2(const char *s);
+char *ft_quotes_trimer(char *str);
 /* </Main> */
 
 #endif
